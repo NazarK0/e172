@@ -1,0 +1,12 @@
+[package]
+name = "e172"
+description = "UI framework for Rust"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/NazarK0/e172"
+homepage = "https://github.com/NazarK0/e172"
+keywords = ["ui_framework", "gui", "declarative_gui"]
+categories = ["gui"]
+
+[dependencies]
