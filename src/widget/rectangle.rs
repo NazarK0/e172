@@ -1,5 +1,6 @@
 mod builder;
 
+use std::cell::Cell;
 use crate::{engine::RenderEngine, shaders::rect_uniform::RectUniform, widget::Widget};
 use wgpu::util::DeviceExt;
 use builder::RectangleBuilder;
@@ -15,6 +16,7 @@ pub struct Rectangle {
     // private params
     bind_group: Option<wgpu::BindGroup>,
     uniform_buffer: Option<wgpu::Buffer>,
+    is_dirty: Cell<bool>,
 }
 
 impl Rectangle {
@@ -28,12 +30,17 @@ impl Rectangle {
             children: Vec::new(),
             bind_group: None,
             uniform_buffer: None,
+            is_dirty: Cell::new(true),
         }
     }
 
     pub fn builder() -> RectangleBuilder {
         RectangleBuilder::default()
     }
+
+    pub fn set_x(&mut self, x: f32) { if self.x != x { self.x = x; self.is_dirty.set(true); } }
+    pub fn set_y(&mut self, y: f32) { if self.y != y { self.y = y; self.is_dirty.set(true); } }
+    pub fn set_color(&mut self, color: [f32; 4]) { self.color = color; self.is_dirty.set(true); }
 
     pub fn set_position(&mut self, x: f32, y: f32) {
         self.x = x;
@@ -100,10 +107,16 @@ impl Widget for Rectangle {
     }
 
     fn draw<'a>(&'a self, engine: &'a RenderEngine, render_pass: &mut wgpu::RenderPass<'a>, offset: [f32; 2]) {
-        // Update GPU data before drawing
-        self.sync_with_gpu(engine, offset);
+        if self.is_dirty.get() {
+            self.sync_with_gpu(engine, offset);
+            
+            // reset dirty flag after syncing with GPU
+            self.is_dirty.set(false); 
+            println!("GPU updated for {}", self.name()); // only for debug
+        }
 
         if let Some(bind_group) = &self.bind_group {
+            render_pass.set_pipeline(&engine.render_pipeline);
             render_pass.set_bind_group(1, bind_group, &[]);
             render_pass.draw(0..6, 0..1);
         }
