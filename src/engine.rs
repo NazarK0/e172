@@ -50,7 +50,6 @@ impl RenderEngine {
         };
         surface.configure(&device, &config);
 
-        // 1. Створюємо Layout для Globals (Група 0)
         let globals_bind_group_layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
             label: Some("Globals Layout"),
             entries: &[wgpu::BindGroupLayoutEntry {
@@ -65,7 +64,6 @@ impl RenderEngine {
             }],
         });
 
-        // 2. Створюємо Layout для Rect (Група 1) - ПЕРЕНЕСЕНО ВИЩЕ
         let rect_bind_group_layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
             label: Some("Rect Layout"),
             entries: &[wgpu::BindGroupLayoutEntry {
@@ -80,16 +78,16 @@ impl RenderEngine {
             }],
         });
 
-        // 3. Тепер створюємо пайплайн, передаючи ОБИДВА лейаути
+
         let render_pipeline = Self::create_pipeline(
             &device,
             &config,
             &globals_bind_group_layout,
-            &rect_bind_group_layout, // Виправлено тут
+            &rect_bind_group_layout,
         )
         .await;
 
-        // 4. Створюємо ресурси для Globals
+
         let globals = Globals::new(size.width as f32, size.height as f32);
         let globals_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Globals Buffer"),
@@ -185,7 +183,6 @@ impl RenderEngine {
             self.config.height = height;
             self.surface.configure(&self.device, &self.config);
 
-            // Оновлюємо матрицю проекції при зміні розміру
             let globals = Globals::new(width as f32, height as f32);
             self.queue
                 .write_buffer(&self.globals_buffer, 0, bytemuck::cast_slice(&[globals]));
