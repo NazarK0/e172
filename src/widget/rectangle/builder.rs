@@ -13,8 +13,8 @@ impl RectangleBuilder {
     pub fn width(mut self, w: f32) -> Self { self.w = w; self }
     pub fn height(mut self, h: f32) -> Self { self.h = h; self }
     pub fn color(mut self, c: [f32; 4]) -> Self { self.color = c; self }
-    pub fn add_child(mut self, child: impl Widget + 'static) -> Self {
-        self.children.push(Box::new(child));
+    pub fn add_child(mut self, child: Box<dyn Widget>) -> Self {
+        self.children.push(child);
         self
     }
     pub fn build(self) -> Rectangle {

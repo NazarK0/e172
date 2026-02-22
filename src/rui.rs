@@ -11,7 +11,7 @@ macro_rules! rui {
     // 2. Internal rule: process field 'children' (recursively)
     (@parse $builder:ident, children: [ $($child_name:ident { $($child_fields:tt)* }),* $(,)? ] $(, $($rest:tt)*)?) => {
         $(
-            $builder = $builder.add_child($crate::rui! { $child_name { $($child_fields)* } });
+            $builder = $builder.add_child(Box::new($crate::rui! { $child_name { $($child_fields)* } }));
         )*
         $crate::rui!(@parse $builder, $($($rest)*)?);
     };

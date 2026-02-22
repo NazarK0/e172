@@ -5,7 +5,7 @@ fn main() {
     let mut app = E172App::new("UI Framework Test");
 
     // 2. Створюємо дерево віджетів
-    let ui = rui! {
+    let ui = Box::new(rui! {
         Rectangle {
             color: [0.1, 0.1, 0.1, 1.0],
             width: 800.0,
@@ -27,8 +27,8 @@ fn main() {
                 }
             ]
         }
-    };
+    });
 
-    app.set_content(ui);
+    app.set_root(ui);
     app.run();
 }

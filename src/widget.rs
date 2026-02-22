@@ -1,7 +1,24 @@
 mod rectangle;
+mod loader;
 pub use rectangle::Rectangle;
+pub use loader::load_ui_from_file;
+use serde::Deserialize;
 
 use crate::engine::RenderEngine;
+
+#[derive(Deserialize, Debug)]
+pub enum WidgetType {
+    Rectangle {
+        x: f32,
+        y: f32,
+        width: f32,
+        height: f32,
+        color: [f32; 4],
+        #[serde(default)]
+        children: Vec<WidgetType>,
+    },
+    // Тут у майбутньому додасте Button, Text тощо
+}
 
 
 pub trait Widget {

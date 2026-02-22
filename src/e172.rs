@@ -26,9 +26,13 @@ impl E172App {
         event_loop.run_app(self).unwrap();
     }
 
-    // Метод для встановлення головного інтерфейсу
-    pub fn set_content(&mut self, widget: impl Widget + 'static) {
-        self.root_widget = Some(Box::new(widget));
+    pub fn set_root(&mut self, widget: Box<dyn Widget>) {
+        self.root_widget = Some(widget);
+    }
+
+    // Method for dynamic loading from RON file
+    pub fn set_content_box(&mut self, widget: Box<dyn Widget>) {
+        self.root_widget = Some(widget);
     }
 
     fn draw_recursive<'a>(

@@ -1,8 +1,9 @@
 mod builder;
 
 use std::cell::Cell;
-use crate::{engine::RenderEngine, shaders::rect_uniform::RectUniform, widget::Widget};
 use wgpu::util::DeviceExt;
+
+use crate::{engine::RenderEngine, shaders::rect_uniform::RectUniform, widget::Widget};
 use builder::RectangleBuilder;
 
 
@@ -85,8 +86,8 @@ impl Rectangle {
         }
     }
     
-    pub fn add_child(&mut self, child: impl Widget + 'static) {
-        self.children.push(Box::new(child));
+    pub fn add_child(&mut self, child: Box<dyn Widget>) {
+        self.children.push(child);
     }
 }
 
