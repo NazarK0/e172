@@ -1,0 +1,2 @@
+pub const WINDOW_WIDTH_DEFAULT: u32 = 800;
+pub const WINDOW_HEIGHT_DEFAULT: u32 = 600;
